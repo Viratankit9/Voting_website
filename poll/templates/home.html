@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+
+        {% if messages %}
+        {% for message in messages %}
+            <div class="mb-3 alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Available Polls</h3>
+            </div>
+                
+            <ul class="list-group">
+                {% for poll in polls %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <strong>{{ poll.question }}</strong>
+                            
+            
+                                                            
+                        </div>
+                        <div class="col-xs-3 text-right">
+                            <a href="{% url 'vote' poll.id %}" class="btn btn-info btn-xs">Vote</a> 
+                            <a href="{% url 'results' poll.id %}" class="btn btn-default btn-xs">View Results</a>
+                           
+                            <form action="{% url 'home' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ poll.id }}">
+                                <button type="submit" name="delete" class="btn btn-danger btn-xs">
+                                    <i class="fa fa-trash"></i> 
+                                </button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
